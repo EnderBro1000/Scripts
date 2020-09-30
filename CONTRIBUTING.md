@@ -1,5 +1,1 @@
-Name of Problem:
-
-Operating System:
-
-Description of Problem:
+Just do it lmao.
