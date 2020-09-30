@@ -98,3 +98,4 @@ else:  # equation for Temperature
     solution = str(variables[0][0] * variables[1][0] / gasConstant / variables[2][0]) + ' Kelvin'
 
 print(solution + ' (solution not rounded)')
+print("This looks pretty good, if it had cheese :D")
