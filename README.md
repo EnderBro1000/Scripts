@@ -1,2 +1,2 @@
-# PythonScripts
-Welcome to PythonScripts by EnderBro1000. That is all.
+# Scripts
+Welcome to Scripts by EnderBro1000. That is all.
