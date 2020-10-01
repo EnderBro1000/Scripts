@@ -1,12 +1,12 @@
-debt = 95000
-interest_percent = .059
-yearly_salary = None
-hourly_salary = 20
-debt_repayment_percent = .2
-debt_repayment_length = 0
-work_days = 261
-work_hours = 8
-interest = 0
+debt = input('Debt: ')
+interest_percent = input('Percentage of Interest: ')
+yearly_salary = input('Yearly Salary: ')
+hourly_salary = input('Hourly Salary: ')
+debt_repayment_percent = input('Debt Repayment Percent: ')
+debt_repayment_length = input('Debt Repayment Length: ')
+work_days = input('Work Days: ')
+work_hours = input('Work Hours: ')
+interest = input('Interest: ')
 
 if yearly_salary and hourly_salary is not None:
     if yearly_salary != hourly_salary * work_days * work_hours:
