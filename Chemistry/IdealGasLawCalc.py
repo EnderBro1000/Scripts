@@ -54,7 +54,7 @@ if variables[0][0] != '?':  # pressure
     elif variables[0][1] == 'bar':
         variables[0][0] /= 1.013
     else:
-        raise Exception('improper unit for Pressure')
+        raise Exception('Improper unit for Pressure')
 variables[0][1] = 'atm'
 
 if variables[1][0] != '?':  # volume
@@ -63,7 +63,7 @@ if variables[1][0] != '?':  # volume
     elif variables[1][1] == 'mL':
         variables[1][0] /= 1000
     else:
-        raise Exception('improper unit for Volume')
+        raise Exception('Improper unit for Volume')
 variables[1][1] = 'L'
 
 if variables[2][0] != '?':  # molecules
@@ -72,7 +72,7 @@ if variables[2][0] != '?':  # molecules
     elif variables[2][1] == 'molecules':
         variables[2][0] /= (6.02 * 10 ^ 23)
     else:
-        raise Exception('improper unit for molecules')
+        raise Exception('Improper unit for molecules')
 variables[2][1] = 'moles'
 
 if variables[3][0] != '?':  # temperature
@@ -83,7 +83,7 @@ if variables[3][0] != '?':  # temperature
     elif variables[3][1] == 'F':
         variables[3][0] = (variables[3][0] - 32) * 5 / 9 + 273.15
     else:
-        raise Exception('improper unit for Temperature')
+        raise Exception('Improper unit for Temperature')
 variables[3][1] = 'K'
 
 print(variables)
