@@ -1,12 +1,12 @@
-debt = input('Debt: ')
-interest_percent = input('Percentage of Interest: ')
-yearly_salary = input('Yearly Salary: ')
-hourly_salary = input('Hourly Salary: ')
-debt_repayment_percent = input('Debt Repayment Percent: ')
-debt_repayment_length = input('Debt Repayment Length: ')
-work_days = input('Work Days: ')
-work_hours = input('Work Hours: ')
-interest = input('Interest: ')
+debt = int(input('Debt: '))
+interest_percent = int(input('Percentage of Interest: '))
+yearly_salary = int(input('Yearly Salary: '))
+hourly_salary = int(input('Hourly Salary: '))
+debt_repayment_percent = int(input('Debt Repayment Percent: '))
+debt_repayment_length = int(input('Debt Repayment Length: '))
+work_days = int(input('Work Days: '))
+work_hours = int(input('Work Hours: '))
+interest = int(input('Interest: '))
 
 if yearly_salary and hourly_salary is not None:
     if yearly_salary != hourly_salary * work_days * work_hours:
