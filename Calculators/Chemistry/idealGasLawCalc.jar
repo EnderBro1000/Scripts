@@ -1,0 +1,19 @@
+int unknownPos = 0;
+int unknownCount = 0;
+int gasConstant = .0821;
+int unknownVar = 0;
+int variables = {
+    {0, ''},
+    {0, ''},
+    {0, ''},
+    {0, ''}
+};
+
+
+def maybe_float(i):
+    try:
+        return float(i)
+    except (ValueError, TypeError):
+        return i
+
+// idk if I'll continue
