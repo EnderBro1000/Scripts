@@ -1,1 +1,1 @@
-import java.util.Random;
+package games.SnakeEyes;
