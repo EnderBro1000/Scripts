@@ -52,11 +52,26 @@ def insertWords(wordList):
         i += 1
         # print(i)
     
-wordList = initWordList(rows, cols)
+# wordList = initWordList(rows, cols)
 
 # insertWords(wordList)
 
-print(wordList)
-printMatrix(wordList)
+# print(wordList)
+# printMatrix(wordList)
 
 
+
+
+def initLetterArray(xLength, yLength):
+    array = [[0] * xLength] * yLength  # Creates blank array
+    rowPos = 0
+    for row in array:
+        colPos = 0
+        for col in row:
+            array[rowPos][colPos] = f"({rowPos}, {colPos})"
+            print(array)
+            colPos += 1
+        rowPos += 1
+    printMatrix(array)
+
+initLetterArray(5, 5)
