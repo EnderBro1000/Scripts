@@ -1,7 +1,8 @@
 import random
+import numpy as np
 
-rows = 5
-cols = 5
+rows = 25
+cols = 20
 
 wordBank = [
     "TEST", "AMUSEMENT", "APPLES", "AUTUMN", "BATS", "BLACK", "BOO", "CANDY", "CAT",
@@ -17,8 +18,8 @@ def getRandomLetter():
     return letters[random.randint(0, len(letters) - 1)]
 
 def getRandomWord():
-    # return wordBank[random.randint(0, wordBank.len)]
-    return wordBank[0]
+    word = wordBank[random.randint(0, len(wordBank) - 1)]
+    return word
 
 def printMatrix(mat):
     out = ""
@@ -28,50 +29,58 @@ def printMatrix(mat):
         out += "\n"
     print(out)
 
-def initWordList(xLength, yLength):
-    wordList = [[0] * xLength] * yLength  
-    for i in range(xLength):
-        for j in range(yLength):
-            # wordList[i] = 
-            # wordList.append()
-            wordList[i][j] = getRandomLetter()
-            print(f"i: {i}, j: {j}, letter: {wordList[i][j]}")
-        print(f"\nrow: {i}\t{wordList[i]}")
-        printMatrix(wordList)
-    return wordList
+def initMatrix(xLength, yLength):
+    return np.zeros((xLength, yLength), dtype=str)
+
+def randLetterMatrix(wordMatrix):
+    # pos = 0
+    for i in range(len(wordMatrix)):
+        for j in range(len(wordMatrix[0])):
+            wordMatrix[i][j] = getRandomLetter()
+            # wordMatrix[i][j] = pos
+            # pos += 1
+    return wordMatrix
 
 
 
 
-def insertWords(wordList):
-    # if (wordList.len < word)
-    start = 0
+def insertWord(wordArray):
     word = getRandomWord()
-    i = 0
-    while i != len(word):
-        i += 1
-        # print(i)
+    wordStart = 0
+    direction = random.randint(1, 3)  # horizontal: 1, vertical: 2, diagonal: 3
+    if direction == 1:    # Horizontal
+        while len(word) > cols:
+            word = getRandomWord()
+        print(word)
+        rowStart = random.randint(0, len(wordArray) - 1)
+        colStart = random.randint(0, len(wordArray[rowStart]) - len(word))
+        for letter in word:
+            wordArray[rowStart][wordStart + colStart] = letter
+            colStart += 1
+    elif direction == 2:  # Vertical
+        while len(word) > rows:
+            word = getRandomWord()
+        print(word)
+        rowStart = random.randint(0, len(wordArray) - len(word))
+        colStart = random.randint(0, len(wordArray[rowStart]) - 1)
+        for letter in word:
+            wordArray[wordStart + rowStart][colStart] = letter
+            rowStart += 1
+    else:                 # Diagonal
+        while len(word) > rows or len(word) > cols:
+            word = getRandomWord
+        print(word)
+        colStart = random.randint(0, len(wordArray) - len(word))
+        rowStart = random.randint(0, len(wordArray[colStart]) - len(word))
+        for letter in word:
+            wordArray[wordStart + colStart][wordStart + rowStart] = letter
+            rowStart += 1
+            colStart += 1
     
-# wordList = initWordList(rows, cols)
+    
+# wordList = randLetterMatrix(initMatrix(rows, cols))
+wordList = initMatrix(rows, cols)
 
-# insertWords(wordList)
+insertWord(wordList)
 
-# print(wordList)
-# printMatrix(wordList)
-
-
-
-
-def initLetterArray(xLength, yLength):
-    array = [[0] * xLength] * yLength  # Creates blank array
-    rowPos = 0
-    for row in array:
-        colPos = 0
-        for col in row:
-            array[rowPos][colPos] = f"({rowPos}, {colPos})"
-            print(array)
-            colPos += 1
-        rowPos += 1
-    printMatrix(array)
-
-initLetterArray(5, 5)
+printMatrix(wordList)
