@@ -98,7 +98,7 @@ wordList = initMatrix(rows, cols)
 
 insertWord(wordList)
 
-printMatrix(letterCheck(1, wordList, getRandomWord()))  # returns one false negative, need to investigate
+printMatrix(letterCheck(1, wordList, getRandomWord()))  # returns multiple false negatives, need to investigate
 wordList = randLetterMatrix(wordList)
 
 printMatrix(wordList)
