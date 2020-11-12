@@ -1,8 +1,8 @@
 import random
 import numpy as np
 
-rows = 10
-cols = 10
+rows = 2
+cols = 5
 
 wordBank = [
     "TEST", "AMUSEMENT", "APPLES", "AUTUMN", "BATS", "BLACK", "BOO", "CANDY", "CAT",
@@ -15,7 +15,8 @@ wordBank = [
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 def getRandomLetter():
-    return letters[random.randint(0, len(letters) - 1)]
+    # return letters[random.randint(0, len(letters) - 1)]
+    return "0"
 
 def getRandomWord():
     word = wordBank[random.randint(0, len(wordBank) - 1)]
@@ -76,21 +77,24 @@ def insertWord(wordMatrix):
             rowStart += 1
             colStart += 1
 
-def letterCheck(direction, wordMatrix, word):  # tests all possible positions if word will work there ******NEED TO RENAME********
-    checkList = np.ones((rows, cols), dtype=int)
+def wordCheck(direction, wordMatrix, word):  # tests all possible positions if word will work there
+    printMatrix(wordMatrix)
+    checkMatrix = np.ones((rows, cols), dtype=int)
     if direction == 1:
-        for idxi, i in enumerate(checkList):
+        for idxi, i in enumerate(checkMatrix):
             for idxj, j in enumerate(i):
                 for idxl, letter in enumerate(word):
                     try:
                         # print(wordMatrix[idxi][idxj + idxl] + "==" + letter)
+                        printMatrix(checkMatrix)
+                        print(f"({idxi}, {idxj}): {letter} == {wordMatrix[idxi][idxj + idxl]}")
                         if wordMatrix[idxi][idxj + idxl] == "" or wordMatrix[idxi][idxj + idxl] == letter:
                             pass
                         else:
-                            checkList[idxi][idxj + idxl] = 0
+                            checkMatrix[idxi][idxj] = 0
                     except IndexError:
-                        checkList[idxi][idxj] = 0
-    return checkList
+                        checkMatrix[idxi][idxj] = 0
+    return checkMatrix
 
 
 
@@ -98,7 +102,7 @@ wordList = initMatrix(rows, cols)
 
 insertWord(wordList)
 
-printMatrix(letterCheck(1, wordList, getRandomWord()))  # returns multiple false negatives, need to investigate
+printMatrix(wordCheck(1, wordList, getRandomWord()))
 wordList = randLetterMatrix(wordList)
 
 printMatrix(wordList)
