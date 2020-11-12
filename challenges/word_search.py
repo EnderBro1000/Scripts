@@ -1,16 +1,17 @@
 import random
 import numpy as np
 
-rows = 10
-cols = 10
+rows = 8
+cols = 9
 
 wordBank = [
-    "TEST", "AMUSEMENT", "APPLES", "AUTUMN", "BATS", "BLACK", "BOO", "CANDY", "CAT"#,
+    "AMUSEMENT"#, "AUTUMN", "APPLES", "BLACK", "CANDY", "BATS", "TEST", "BOO", "CAT"#,
     # "COSTUMES", "DRACULA",	"EERIE"," EXCITEMENT", "FRANKENSTEIN", "FRIGHTEN",
     # "GAMES", "GHOSTS", "GOBLIN", "HALLOWEEN", "HARVEST", "HAYRIDE", "MASK",
     # "MONSTER", "MUMMY", "NIGHT", "OCTOBER", "ORANGE", "PARTY", "PRANK", "PUMPKINS",
     # "SAFE", "SCARE", "SHADOWS", "SKELETON", "SPIDER", "SPOOKY", "TRICKORTREAT", "WITCH"
 ]
+tempWordBank = wordBank
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -19,9 +20,8 @@ def getRandomLetter():
     return "0"
 
 def getWord():
-    random.shuffle(wordBank)
     try:
-        word = wordBank.pop(1)
+        word = tempWordBank.pop(0)
     except IndexError:
         return None
     return word
@@ -48,92 +48,126 @@ def randLetterMatrix(wordMatrix):  # Randomizes
     return wordMatrix
 
 def wordCheck(direction, wordMatrix, word):  # tests all possible positions if word will work there
-    print(word)
     possible = False
-    printMatrix(wordMatrix)
+    # printMatrix(wordMatrix)
     checkMatrix = np.ones((rows, cols), dtype=int)
     if direction == 1:
         for idxi, i in enumerate(checkMatrix):
             for idxj, j in enumerate(i):
                 for idxl, letter in enumerate(word):
-                    try:
-                        # print(wordMatrix[idxi][idxj + idxl] + "==" + letter)
-                        if wordMatrix[idxi][idxj + idxl] == "0" or wordMatrix[idxi][idxj + idxl] == letter:
-                            possible = True
-                        else:
+                    if direction == 1:
+                        try:
+                            # print(wordMatrix[idxi][idxj + idxl] + "==" + letter)
+                            if wordMatrix[idxi][idxj + idxl] == "" or wordMatrix[idxi][idxj + idxl] == letter:
+                                possible = True
+                            else:
+                                checkMatrix[idxi][idxj] = 0
+                        except IndexError:
                             checkMatrix[idxi][idxj] = 0
-                    except IndexError:
-                        checkMatrix[idxi][idxj] = 0
-    if direction == 2:
-        for idxi, i in enumerate(checkMatrix):
-            for idxj, j in enumerate(i):
-                for idxl, letter in enumerate(word):
-                    try:
+                    if direction == 2:
+                        try:
                         # print(wordMatrix[idxi][idxj + idxl] + "==" + letter)
-                        if wordMatrix[idxi + idxl][idxj] == "0" or wordMatrix[idxi + idxl][idxj] == letter:
-                            possible = True
-                        else:
+                            if wordMatrix[idxi + idxl][idxj] == "" or wordMatrix[idxi + idxl][idxj] == letter:
+                                possible = True
+                            else:
+                                checkMatrix[idxi][idxj] = 0
+                        except IndexError:
                             checkMatrix[idxi][idxj] = 0
-                    except IndexError:
-                        checkMatrix[idxi][idxj] = 0
-    else:
-        for idxi, i in enumerate(checkMatrix):
-            for idxj, j in enumerate(i):
-                for idxl, letter in enumerate(word):
-                    try:
-                        # print(wordMatrix[idxi][idxj + idxl] + "==" + letter)
-                        if wordMatrix[idxi + idxl][idxj + idxl] == "0" or wordMatrix[idxi + idxl][idxj + idxl] == letter:
-                            possible = True
-                        else:
+                    else:
+                        try:
+                            # print(wordMatrix[idxi][idxj + idxl] + "==" + letter)
+                            if wordMatrix[idxi + idxl][idxj + idxl] == "" or wordMatrix[idxi + idxl][idxj + idxl] == letter:
+                                possible = True
+                            else:
+                                checkMatrix[idxi][idxj] = 0
+                        except IndexError:
                             checkMatrix[idxi][idxj] = 0
-                    except IndexError:
-                        checkMatrix[idxi][idxj] = 0
     return checkMatrix, possible
 
-def insertWord(wordMatrix):
+def insertWord(wordMatrix):  # I want to create a better system to utilize the checkMatrix, to ensure all words are in if possible
     word = getWord()
     if word is None:
         return wordMatrix
     directions = (list(range(1, 4)))
     random.shuffle(directions)
-    print(directions)  # horizontal: 1, vertical: 2, diagonal: 3
+    # print(directions)  # horizontal: 1, vertical: 2, diagonal: 3
     try:
         direction = directions.pop(0)
     except IndexError:
         return wordMatrix
     checkMatrix = wordCheck(direction, wordMatrix, word)
     for direction in directions:
-        if checkMatrix[1] == False:
-            word = getWord()
-            if word is None:
-                return wordMatrix
+        while checkMatrix[1] == False:
+            try:
+                direction = directions.pop(0)
+            except IndexError:
+                word = getWord()
+                if word is None:
+                    return wordMatrix
             checkMatrix = wordCheck(direction, wordMatrix, word)
-    if checkMatrix[1] == False:
-        return wordMatrix
     if direction == 1:    # Horizontal
-        while checkMatrix:
-            word = getWord()
-        print(word)
-        rowStart = random.randint(0, len(wordMatrix) - 1)
-        colStart = random.randint(0, len(wordMatrix[rowStart]) - len(word))
+        # print(word)
+        enumCheck = list(enumerate(checkMatrix[0]))
+        random.shuffle(enumCheck)
+        rows = enumCheck
+        rowStart = None
+        colStart = None
+        for idxi, i in rows:
+            j = list(enumerate(i))
+            random.shuffle(j)
+            for idxj, z in j:
+                if z == 1:
+                    rowStart = idxi
+                    colStart = idxj
+                    break
+            if rowStart is not None:
+                break
+        if rowStart is None or colStart is None:
+            return wordMatrix
         for letter in word:
             wordMatrix[rowStart][colStart] = letter
             colStart += 1
     elif direction == 2:  # Vertical
-        while len(word) > rows:
-            word = getWord()
-        print(word)
-        rowStart = random.randint(0, len(wordMatrix) - len(word))
-        colStart = random.randint(0, len(wordMatrix[rowStart]) - 1)
+        # print(word)
+        enumCheck = list(enumerate(checkMatrix[0]))
+        random.shuffle(enumCheck)
+        rows = enumCheck
+        rowStart = None
+        colStart = None
+        for idxi, i in rows:
+            j = list(enumerate(i))
+            random.shuffle(j)
+            for idxj, z in j:
+                if z == 1:
+                    rowStart = idxi
+                    colStart = idxj
+                    break
+            if rowStart is not None:
+                break
+        if rowStart is None or colStart is None:
+            return wordMatrix
         for letter in word:
             wordMatrix[rowStart][colStart] = letter
             rowStart += 1
     else:                 # Diagonal
-        while len(word) > rows or len(word) > cols:
-            word = getWord
-        print(word)
-        colStart = random.randint(0, len(wordMatrix) - len(word))
-        rowStart = random.randint(0, len(wordMatrix[colStart]) - len(word))
+        # print(word)
+        enumCheck = list(enumerate(checkMatrix[0]))
+        random.shuffle(enumCheck)
+        rows = enumCheck
+        rowStart = None
+        colStart = None
+        for idxi, i in rows:
+            j = list(enumerate(i))
+            random.shuffle(j)
+            for idxj, z in j:
+                if z == 1:
+                    rowStart = idxi
+                    colStart = idxj
+                    break
+            if rowStart is not None:
+                break
+        if rowStart is None or colStart is None:
+            return wordMatrix
         for letter in word:
             wordMatrix[colStart][rowStart] = letter
             rowStart += 1
@@ -142,14 +176,13 @@ def insertWord(wordMatrix):
 
 
 
-
+print(f"{wordBank}")
 wordList = initMatrix(rows, cols)
-while len(wordBank) > 0:
+while len(tempWordBank) > 0:
     wordList = insertWord(wordList)
 
 wordList = randLetterMatrix(wordList)
 
-print(wordList)
 printMatrix(wordList)
 
 # There seems to be an infinite loop somewhere, need to find it later
