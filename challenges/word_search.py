@@ -100,13 +100,25 @@ def wordCheck2(direction, word, wordMatrix):
                             pos.add((idxi, idxj))
                     except IndexError:
                         pos.add((idxi, idxj))
+                elif direction == 2:
+                    try:
+                        if np.all(wordMatrix[idxi + idxl][idxj] != "" and wordMatrix[idxi + idxl][idxj] != letter):
+                            pos.add((idxi, idxj))
+                    except IndexError:
+                        pos.add((idxi, idxj))
+                else:
+                    try:
+                        if np.all(wordMatrix[idxi + idxl][idxj + idxl] != "" and wordMatrix[idxi + idxl][idxj + idxl] != letter):
+                            pos.add((idxi, idxj))
+                    except IndexError:
+                        pos.add((idxi, idxj))
     return pos
 
 def insertWord(wordMatrix):  # I want to create a better system to utilize the checkMatrix, to ensure all words are in if possible
     word = getWord()
     if word is None:
         return wordMatrix
-    directions = [range(1, 4)]
+    directions = list(range(1, 4))
     random.shuffle(directions)
     # print(directions)  # horizontal: 1, vertical: 2, diagonal: 3
     try:
@@ -123,28 +135,33 @@ def insertWord(wordMatrix):  # I want to create a better system to utilize the c
                 if word is None:
                     return wordMatrix
             checkList = wordCheck2(direction, wordMatrix, word)
+    print(f"direction: {direction}")
     if direction == 1:    # Horizontal
-        x, y = random.sample(checkList, 1)
+        print(f"{checkList} this is insertword")
+        pos = random.sample(checkList, 1)
+        x, y = pos[0]
+        print(x, y)
         for letter in word:
             wordMatrix[x][y] = letter
             x += 1
-
-
-
     elif direction == 2:  # Vertical
-        x, y = random.sample(checkList, 1)
+        print(f"{checkList} this is insertword")
+        pos = random.sample(checkList, 1)
+        x, y = pos[0]
+        print(x, y)
         for letter in word:
             wordMatrix[x][y] = letter
             y += 1
     else:                 # Diagonal
+        print(f"{checkList} this is insertword")
         pos = random.sample(checkList, 1)
-        print(checkList)
         x, y = pos[0]
         print(x, y)
         for letter in word:
             wordMatrix[x][y] = letter
             x += 1
             y += 1
+    return wordMatrix
 
 
 
@@ -153,6 +170,7 @@ wordList = initMatrix(rows, cols)
 while len(tempWordBank) > 0:
     wordList = insertWord(wordList)
 
+print(wordList)
 wordList = randLetterMatrix(wordList)
 
 printMatrix(wordList)
