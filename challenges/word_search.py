@@ -2,19 +2,23 @@ import pretty_errors
 import random
 import numpy as np
 
-rows = 8
-cols = 8
+letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+rows = 20
+cols = 20
 
 wordBank = [
-    "AMUSEMENT", "AUTUMN", "APPLES", "BLACK", "CANDY", "BATS", "TEST", "BOO", "CAT"#,
-    # "COSTUMES", "DRACULA",	"EERIE"," EXCITEMENT", "FRANKENSTEIN", "FRIGHTEN",
-    # "GAMES", "GHOSTS", "GOBLIN", "HALLOWEEN", "HARVEST", "HAYRIDE", "MASK",
-    # "MONSTER", "MUMMY", "NIGHT", "OCTOBER", "ORANGE", "PARTY", "PRANK", "PUMPKINS",
-    # "SAFE", "SCARE", "SHADOWS", "SKELETON", "SPIDER", "SPOOKY", "TRICKORTREAT", "WITCH"
+    "AMUSEMENT", "TEA", "AUTUMN", "APPLES", "BLACK", "CANDY", "BATS", "TEST", "BOO", "CAT",
+    "COSTUMES", "DRACULA", "EERIE", "EXCITEMENT", "FRANKENSTEIN", "FRIGHTEN",
+    "GAMES", "GHOSTS", "GOBLIN", "HALLOWEEN", "HARVEST", "HAYRIDE", "MASK",
+    "MONSTER", "MUMMY", "NIGHT", "OCTOBER", "ORANGE", "PARTY", "PRANK", "PUMPKINS",
+    "SAFE", "SCARE", "SHADOWS", "SKELETON", "SPIDER", "SPOOKY", "TRICKORTREAT", "WITCH"
 ]
-tempWordBank = wordBank
+wordBank.sort(key=lambda s: len(s))
 
-letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+tempWordBank = []
+for idxw, word in enumerate(wordBank):
+    tempWordBank.append([word, {1, 2, 3}])
 
 
 
@@ -34,22 +38,6 @@ def getRandomLetter():
     # return letters[random.randint(0, len(letters) - 1)]
     return "0"
 
-def getWord(wordMatrix):
-    if len(tempWordBank > 1):
-        word = tempWordBank.pop()
-    else:
-        return None
-    direction, directions = randomDirection(wordMatrix, word)
-
-    if directions < 1:
-        getWord(wordMatrix)
-    possible = 0:
-    while possible < 1:
-        possible = len(wordCheck(direction, word, wordMatrix))
-        direction, directions = randomDirection(wordMatrix, word) #writing HERE ******************************************
-    else: 
-
-
 def randLetterMatrix(wordMatrix):
     for idxi, i in enumerate(wordMatrix):
         for idxj, j in enumerate(i):
@@ -57,7 +45,24 @@ def randLetterMatrix(wordMatrix):
                 wordMatrix[idxi][idxj] = getRandomLetter()
     return wordMatrix
 
-def wordCheck(direction, word, wordMatrix):
+
+def newWord():
+    if len(tempWordBank) > 1:
+        word = tempWordBank[-1][0]
+    else:
+        return None
+    return word
+
+def newDirection(word):
+    if len(tempWordBank[-1][1]) < 1:
+        tempWordBank.pop()
+        return None
+    direction = random.sample(tempWordBank[-1][1], 1)
+    direction = direction[0]
+    tempWordBank[-1][1].discard(direction)
+    return direction
+
+def wordCheck(word, direction, wordMatrix):
     checkList = set()
     for idxi, i in enumerate(wordMatrix):
         for idxj, j in enumerate(i):
@@ -86,56 +91,43 @@ def wordCheck(direction, word, wordMatrix):
                         break
             if possible:
                 checkList.add((idxi, idxj))
-    return checkList
+    if len(checkList) < 1:
+        return None
+    pos = random.sample(checkList, 1)
+    pos = pos[0]
+    return pos
 
-def randomDirection(wordMatrix, word):
-    directions = {1, 2, 3}
-    direction = random.sample(directions, 1)
-    direction = direction[0]
-    directions.remove(direction)
-    checkList = wordCheck(direction, word, wordMatrix)
-    while len(checkList) < 1:
-        try:
-            direction = random.sample(directions, 1)
-            direction = direction[0]
-            directions.remove(direction)
-        except ValueError:
-            return None, 0
-        checkList = wordCheck(direction, word, wordMatrix)
-    return direction, len(directions)
+def wordFinder(wordMatrix):
+    word = newWord()
+    if word is None:
+        return None
+    
+    direction = newDirection(word)
+    if direction is None:
+        return wordFinder(wordMatrix)
+    
+    pos = wordCheck(word, direction, wordMatrix)
+    if pos is None:
+        return wordFinder(wordMatrix)
+    
+    tempWordBank[-1][1].clear()
+    info = [word, direction, pos]
+    return info
 
-def insertWord(wordMatrix):  # I want to create a better system to utilize the checkMatrix, to ensure all words are in if possible
-    word = getWord()
-    while word is None:
-        if len(tempWordBank) < 1:
-            return wordMatrix
-        word = getWord()
-    direction, directions = randomDirection(wordMatrix, word)
-    while direction is None:
-        while directions < 1:
-            word = getWord()
-            while word is None:
-                if len(tempWordBank) < 1:
-                    return wordMatrix
-            word = getWord()
-        direction = randomDirection(wordMatrix, word)
-        direction = randomDirection(wordMatrix, word)
-    checkList = wordCheck(direction, word, wordMatrix)
+
+def insertWord(word, direction, pos, wordMatrix):
     if direction == 1:    # Horizontal
-        pos = random.sample(checkList, 1)
-        x, y = pos[0]
+        x, y = pos
         for letter in word:
             wordMatrix[x][y] = letter
             y += 1
     elif direction == 2:  # Vertical
-        pos = random.sample(checkList, 1)
-        x, y = pos[0]
+        x, y = pos
         for letter in word:
             wordMatrix[x][y] = letter
             x += 1
     else:                 # Diagonal
-        pos = random.sample(checkList, 1)
-        x, y = pos[0]
+        x, y = pos
         for letter in word:
             wordMatrix[x][y] = letter
             x += 1
@@ -147,10 +139,11 @@ def insertWord(wordMatrix):  # I want to create a better system to utilize the c
 print(f"{wordBank}")
 wordList = initMatrix(rows, cols)
 while len(tempWordBank) > 0:
-    wordList = insertWord(wordList)
+    info = wordFinder(wordList)
+    if info is None:
+        break
+    insertWord(info[0], info[1], info[2], wordList)
 
 wordList = randLetterMatrix(wordList)
 
 printMatrix(wordList)
-
-# print(wordCheck(1, wordBank[0], wordList))
