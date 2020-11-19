@@ -4,8 +4,8 @@ import numpy as np
 
 letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-rows = 20
-cols = 20
+rows = 5
+cols = 5
 
 wordBank = [
     "AMUSEMENT", "TEA", "AUTUMN", "APPLES", "BLACK", "CANDY", "BATS", "TEST", "BOO", "CAT",
@@ -36,7 +36,7 @@ def initMatrix(xLength, yLength):
 
 def getRandomLetter():
     # return letters[random.randint(0, len(letters) - 1)]
-    return "0"
+    return "."
 
 def randLetterMatrix(wordMatrix):
     for idxi, i in enumerate(wordMatrix):
@@ -108,6 +108,10 @@ def wordFinder(wordMatrix):
     
     pos = wordCheck(word, direction, wordMatrix)
     if pos is None:
+        try:
+            wordBank.remove(word)
+        except Exception:
+            pass
         return wordFinder(wordMatrix)
     
     tempWordBank[-1][1].clear()
@@ -147,3 +151,4 @@ while len(tempWordBank) > 0:
 wordList = randLetterMatrix(wordList)
 
 printMatrix(wordList)
+print(wordBank)
