@@ -1,0 +1,3 @@
+Wow this is certainly a small message. It is hardly more than a few sentences. The point of course is to simply show
+a simple brute force that will not take more than a couple seconds. I was getting lazy watching random text small
+take 10 plus seconds to run.
