@@ -22,4 +22,3 @@ else:
         temp = order[0]
 
 print(order)
-
