@@ -28,4 +28,4 @@ def stringToNodeMatrix(text):
     for i, line in enumerate(lines):
         for j, char in enumerate(line):
             matrix[i][j] = Node(char, [i, j])
-    return matrix
+    return matrix 
