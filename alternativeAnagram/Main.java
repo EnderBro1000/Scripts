@@ -28,20 +28,40 @@ public class Main {
 
         */
         //String input = inToString();
+
+        long startTime = System.currentTimeMillis();
+
         //String input = standardInput.nextLine();
+        String input = "test";
 
-        final long startTime = System.currentTimeMillis();
-
-        String input = "nadlannoru";
-
+        // we got some big speeds right here
         String anagram = anagram(input);
         
         System.out.println((anagram == null) ? "-1" : anagram);
 
-        final long endTime = System.currentTimeMillis();
+        long endTime = System.currentTimeMillis();
 
-        final long computeTime = endTime - startTime;
+        long computeTime = endTime - startTime;
         System.out.println("Time to complete: " + computeTime + "ms");
+
+        if (anagram == null) {
+            System.out.println("Null anagram!");
+            return;
+        }
+
+        System.out.println("Anagram: " + anagram);
+
+        startTime = System.currentTimeMillis();
+
+        boolean trueAnagram = trueAnagram(anagram);
+
+        endTime = System.currentTimeMillis();
+
+        computeTime = endTime - startTime;
+
+        System.out.println("Anagram?: " + trueAnagram);
+        System.out.println("Time to test: " + computeTime + "ms");
+
     }
     
     
