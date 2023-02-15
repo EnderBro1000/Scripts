@@ -1,5 +1,4 @@
-import numpy as np
-from mapParser import MapParser, stringToNodeMatrix
+from mapParser import MapParser
 from node import Node
 import functions
 
